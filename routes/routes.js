@@ -1,19 +1,24 @@
 const express = require('express');
 const router = express.Router()
 const Model =  require('/model/model')
+const axios = require('axios')
 
 module.exports = router;
 
 //psoting data into the api
 router.post('/.post',async (req,res)=>{
-    //created an object where users can store their info
-    //the same as the model mongoose db
+ 
     const data = new Model({
-        name:req.body.team,
-        age:req.body.player
+        team:req.body.team,
+        player:req.body.player,
+        league:req.body.league,
+        country:req.body.country,
+        goals:req.body.goals,
+        assists:req.body.assists,
+        position:req.body.position
     })
 
-    try{                     //.save will save my daat
+    try{                    
         const datatosave = await data.save();
         res.status(200).json(datatosave)
     }
@@ -49,7 +54,7 @@ router.get('/getone:id',async (req,res)=>{
 })
 
 //updating data by id
-//updating IS HARDER
+
 router.patch('/patch:id', (req,res)=>{
    try{
     const id = req.params.id;
@@ -93,3 +98,18 @@ router.delete('/delete:id',(req,res)=>{
 
 })
 
+router.get('/getLineups', async (req, res) => {
+  try {
+    const response = await axios.get('https://api-football-v1.p.rapidapi.com/v3/fixtures/lineups', {
+      params: { fixture: '215662' },
+      headers: {
+        'X-RapidAPI-Key': 'eb9d613001msh2580e8cafc2f210p10e30djsnbaf8b97932a8',
+        'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+      }
+    });
+
+    res.status(response.status).send(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});

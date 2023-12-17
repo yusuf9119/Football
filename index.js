@@ -1,8 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-//LINKS TO THE ROOTS FILE IN THE ROUTES FOLDER
-//THIS IS WHERE IM GOING TO DO ALL OF THE ENDPOINTS
-//HERE I WILL BE ONLY SETTING UP THE SERVER
+
 const routes = ('/routes/routes');
 app.use('/api',routes);
 
@@ -13,8 +11,9 @@ require.env.config();
 
 
 //CONNECTING THE MONGODB DATABASE
-const mongostring = process.env;// need TO ADD A URL TO MY MONGODDB DATABASE
-mongoose.connect(mongostring);
+const password = process.env.R2yhCGFL5AA3kk4Y
+const mongostring = `mongodb+srv://yusufa9339:<password>@cluster0.9qrcdb6.mongodb.net/`;
+mongoose.connect(mongostring,password);
 const database = mongoose.connection
 database.on('error',(error)=>{
     console.log(error)
@@ -26,7 +25,7 @@ database.once('connected',()=>{
 
 
 
-
+//Port
 app.listen(3000, () => {
     console.log('the server is currently running at ${3000}')
 })
